@@ -2,20 +2,14 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
+from bs4 import BeautifulSoup
 
 def findPledged(page):
-    the_page = page.readlines()   # read html file  
-    for line in the_page:             # go through the lines             
-        lineStr = str(line, encoding='utf8')  # put the lines in readable form (utf8)
-        if '<span data-test-id="amount-pledged">' in lineStr: # search for this string
-            words = lineStr.split(',') # split the line into words 
-            for word in words:    # loop over each word
-                 if '<span data-test-id="amount-pledged">' in word:  # look for datetime=
-                    target = (word.split('</span>',1)) # split the word at <
-                    date_target = target[0] 
-                    dateStr = float(date_target.strip('<span data-test-id="amount-pledged">'))  
-                    return dateStr
-
+    soup = BeautifulSoup(page, 'html.parser')
+    
+    for span in soup.findAll("span", {"data-test-id": "amount-pledged"}):
+        print(span.text)
+    
 def scraper(url):
     browser = webdriver.Chrome()
     browser.get(url)
