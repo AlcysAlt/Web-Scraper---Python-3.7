@@ -1,3 +1,4 @@
+import os
 import time
 import requests
 from selenium import webdriver
@@ -83,4 +84,5 @@ def interface():
 
 #This starts the web scraper
 interface()
+os.system("pause")
 
