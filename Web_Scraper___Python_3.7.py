@@ -1,8 +1,15 @@
 from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import Select
+from selenium.common.exceptions import NoSuchElementException
+
+def findPledged(page):
+
+
 def scraper(url):
     browser = webdriver.Chrome()
     browser.get(url)
-    page = browser.find_elements_by_xpath('/html/body/main/div/section/section[2]/div[3]/div/div[1]/div[1]/div/div/div/div[3]/div[2]/div[2]/div[1]/span[1]')
+    page = browser.page_source
     print(page)
 
 def interface():
