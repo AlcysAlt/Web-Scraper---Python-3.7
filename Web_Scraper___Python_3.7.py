@@ -1,19 +1,23 @@
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
 import time
+from price_parser import Price
+
 
 def getPledged(page):
     soup = BeautifulSoup(page, 'html.parser')
-    
+    totalPledged = 0.0
     for span in soup.findAll("span", {"data-test-id": "amount-pledged"}):
-        print(span.text)
+        pledge = Price.fromstring(span.text)
+        totalPledged = totalPledged + pledge.amount_float
+    print(totalPledged)
+
     
 def scraper(url):
     browser = webdriver.Chrome()
     browser.get(url)
+
     page = browser.page_source
     return page
 
