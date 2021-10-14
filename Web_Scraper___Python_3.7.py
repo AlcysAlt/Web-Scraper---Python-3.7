@@ -19,18 +19,18 @@ def scraper(url):
 
 def interface():
     print("Art - 1\nTechnology - 16\n ")
-    option = input("Please select a category:")
-    url = "https://www.kickstarter.com/discover/advanced?category_id=" + option + "&sort=newest&seed=2723668&page="
-    maxPages = input("Please enter the amount of pages to scrape: ")
+    option = input("Please select a category: ")
+    url = str("https://www.kickstarter.com/discover/advanced?category_id=" + option + "&sort=newest&seed=2723668&page=")
+    maxPages = int(input("Please enter the amount of pages to scrape: "))
 
-    for int(i) in range(1, maxPages):
-        tempUrl = url + i
-        print(tempURL)
-        #getPledged(scraper(tempUrl))
-        #time.sleep(1)
+    for i in range(1, maxPages + 1):
+        tempUrl = url + str(i)
+        print(tempUrl)
+        getPledged(scraper(tempUrl))
+        print("Next Page")
+        time.sleep(1)
     
-    print(url)
-    getPledged(scraper(url))
+
 
 interface()
 
