@@ -11,6 +11,7 @@ def getPledged(page):
     totalPledged = 0.0
     for span in soup.findAll("span", {"data-test-id": "amount-pledged"}):
         pledge = Price.fromstring(span.text)
+        print(pledge.currency)
         totalPledged = totalPledged + pledge.amount_float
     return totalPledged
 
