@@ -1,19 +1,25 @@
+import time
+import requests
 from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from bs4 import BeautifulSoup
-import time
 from price_parser import Price
-import requests
+from currency_converter import CurrencyConverter
+
+currencyDict={"$":"USD","HK$":"HKD","€":"EUR","£":"GBP","S$":"SGD","CA$":"CAD","CHF":"CHF","MX$":"MXN","AU$":"AUD","¥":"JPY","DKK":"DKK"}
+c = CurrencyConverter()
+def currencyParsing(currencySymbol, amount):
+    return round(c.convert(amount, currencyDict.get(currencySymbol), 'USD'), 2)
+    
 
 
 def getPledged(page):
     soup = BeautifulSoup(page, 'html.parser')
-    totalPledged = 0.0
+    pledged = 0.0
     for span in soup.findAll("span", {"data-test-id": "amount-pledged"}):
         pledge = Price.fromstring(span.text)
-        print(pledge.currency)
-        totalPledged = totalPledged + pledge.amount_float
-    return totalPledged
+        pledged = pledged + currencyParsing(pledge.currency, pledge.amount_float)
+    return pledged
 
 
 def scraper1(url):
@@ -36,7 +42,7 @@ def interface():
         totalPledged = totalPledged + getPledged(scraper1(tempUrl))
         print("Next Page")
         time.sleep(1)
-    print("Total amount pledged:", totalPledged)
+    print("Total amount pledged: $", totalPledged)
 
 
 interface()
