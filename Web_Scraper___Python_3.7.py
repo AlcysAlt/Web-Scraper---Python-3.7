@@ -64,7 +64,7 @@ def scraper1(url):
     return page
 
 #User Interface
-def interface():
+def scrapeTotalPledged():
     print("Here are the categories: \n")
     for category, value in optionsDict.items():
         print(category,"\n-------------")
@@ -82,7 +82,8 @@ def interface():
         time.sleep(1) #Pauses for 1 second before running the scraper again, prevents triggering ddos protection
     print("Total amount pledged: $", round(totalPledged,2))
 
+
 #This starts the web scraper
-interface()
+scrapeTotalPledged()
 os.system("pause")
 
