@@ -55,6 +55,14 @@ def getPledged(page):
         pledged = pledged + currencyParsing(Price.fromstring(span.text))
     return pledged
 
+#Finds and extracts amount of search results
+def getResultsFound(page):
+    soup = BeautifulSoup(page, 'html.parser')
+    pledged = 0.0
+    for bclass in soup.findAll("b", {"class": "count ksr-green-500"}):
+        totalResults = Price.fromstring(bclass.text)
+    return totalResults.amount_float
+
 #Scraper which can be used to download the website, can be swapped out for a different one as long as it returns html for use with BeautifulSoup
 def scraper1(url):
     browser = webdriver.Chrome()
@@ -63,7 +71,7 @@ def scraper1(url):
     page = browser.page_source
     return page
 
-#User Interface
+#Interface for taking input for scraping the total pledged
 def scrapeTotalPledged():
     print("Here are the categories: \n")
     for category, value in optionsDict.items():
@@ -81,9 +89,35 @@ def scrapeTotalPledged():
         totalPledged = totalPledged + getPledged(scraper1(tempUrl))
         time.sleep(1) #Pauses for 1 second before running the scraper again, prevents triggering ddos protection
     print("Total amount pledged: $", round(totalPledged,2))
+    
+#Interface for taking input for scraping the amount of search results
+def scrapeSearchResults():
+    searchTerms = []
+    resultsFreq = {}
+    search = ''
+    loop = 1
+    print("Please enter the search terms one at a time, if you want to start the scraper, write 'start'")
+    while loop == 1:
+        search = input("Please enter a search term:\n") 
+        if 'start' in search:
+            loop = 0
+            break
+        else:
+            searchTerms.append(search)
+        
+
+    for term in searchTerms:
+        url = "https://www.kickstarter.com/discover/advanced?ref=nav_search&term=" + term
+        resultsFreq[term] = float(getResultsFound(scraper1(url)))
+
+    for searchTerm in resultsFreq.items():
+        print(searchTerm, '\n')
+        
+    print("The search result with the most amount of results is: ", max(resultsFreq,key= lambda x: resultsFreq[x]))
+
 
 
 #This starts the web scraper
-scrapeTotalPledged()
+scrapeSearchResults()
 os.system("pause")
 
